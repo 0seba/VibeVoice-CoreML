@@ -15,6 +15,13 @@ dependencies = [
     "transformers",
     "tqdm",
     "huggingface_hub",
+    "fastapi>=0.128.0",
+    "uvicorn>=0.39.0",
+    "sounddevice>=0.5.3",
+    "soundfile>=0.13.1",
+    "aiofiles>=25.1.0",
+    "ftfy>=6.3.1",
+    "pydub>=0.25.1",
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -28,4 +35,4 @@ classifiers = [
 where = ["src"]
 
 [project.scripts]
-"vibevoiceane.server" = "vibevoiceane.numpy_realtime_inference:main"
+"vibevoiceane.server" = "vibevoiceane.server:start_server"
