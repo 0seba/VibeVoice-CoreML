@@ -1276,27 +1276,20 @@ class NumPyStreamingGenerator:
         # Initialize audio chunks
         audio_chunks = [[] for _ in range(batch_size)]
         speech_latent_buffer = []
-        acoustic_cache = []  # Simple list for cache
 
         # Prepare prefilled outputs
         if all_prefilled_outputs is not None:
             (
-                # lm_output,
-                # tts_lm_output,
                 tts_lm_negative_output,
                 lm_cache_position,
                 tts_lm_cache_position,
                 tts_lm_negative_cache_position,
             ) = self._prepare_prefilled_outputs(all_prefilled_outputs)
         else:
-            lm_output = None
-            tts_lm_output = None
             tts_lm_negative_output = None
 
         # Initialize sequence tracking
-        tts_lm_seq = tts_lm_input_ids.copy()
         step = tts_lm_input_ids.shape[1]
-        tts_text_window_index = 0
         finished = np.zeros(batch_size, dtype=np.bool_)
         reach_max_step_sample = np.zeros(batch_size, dtype=np.bool_)
 
@@ -1304,7 +1297,6 @@ class NumPyStreamingGenerator:
         # cache_position = np.arange(step, dtype=np.int64)
 
         # Get text window sizes
-        first_text_window_size = min(self.TTS_TEXT_WINDOW_SIZE, tts_text_ids.shape[1])
 
         # Set timesteps for diffusion
         self.noise_scheduler.set_timesteps(self.ddpm_num_inference_steps)

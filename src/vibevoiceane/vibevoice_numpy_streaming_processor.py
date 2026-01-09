@@ -1,8 +1,7 @@
 import os
 import json
 import logging
-import numpy as np
-from typing import List, Optional, Union, Dict, Any, Tuple
+from typing import List, Optional, Union, Dict, Any
 from transformers.tokenization_utils_base import (
     BatchEncoding,
     PaddingStrategy,

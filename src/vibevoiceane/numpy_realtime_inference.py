@@ -26,8 +26,6 @@ from typing import Tuple, Dict, Any, Optional
 
 import numpy as np
 
-MODEL_BASE_PATH = "/Users/seba/Documents/mydeving/VibeVoice-Realtime-0.5B-CoreML"
-
 # Import CoreML tools
 import coremltools as ct
 
@@ -42,6 +40,8 @@ from vibevoiceane.configuration_vibevoice_streaming import VibeVoiceStreamingCon
 from vibevoiceane.wrapped_inference import (
     NumPyStreamingGenerator,
 )
+
+MODEL_BASE_PATH = "/Users/seba/Documents/mydeving/VibeVoice-Realtime-0.5B-CoreML"
 
 
 class VoiceMapper:
@@ -302,8 +302,6 @@ def main():
     print("=" * 60)
     print("VibeVoice Numpy-Only CoreML Inference Demo")
     print("=" * 60)
-
-    device = "cpu"
 
     # Validate txt file
     if not os.path.exists(args.txt_path):
