@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vibevoiceane"
+version = "0.1.0"
+description = "VibeVoice TTS running on Apple Neural Engine"
+readme = "README.md"
+requires-python = ">=3.9,<3.13"
+dependencies = [
+    "coremltools==9.0.0",
+    "einops",
+    "numpy>2",
+    "transformers",
+    "tqdm",
+    "huggingface_hub",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/0seba/vibevoice-ane"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.scripts]
+"vibevoiceane.server" = "vibevoiceane.numpy_realtime_inference:main"
