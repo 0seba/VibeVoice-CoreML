@@ -701,6 +701,8 @@ You think you can just waltz in here and cause chaos? Well, I've got news for yo
         });
 
         // --- Core Stream Processing Function ---
+        let leftoverChunk = null; // Buffer for partial bytes
+
         async function processStream() {
             if (!streamReader) return;
 
@@ -738,18 +740,37 @@ You think you can just waltz in here and cause chaos? Well, I've got news for yo
                     return;
                 }
 
-                const chunkByteLength = value.byteLength;
-                const alignedByteLength = chunkByteLength - (chunkByteLength % 2);
+                // --- Byte Alignment Fix ---
+                let dataToProcess = value;
 
-                if (alignedByteLength === 0) {
+                // Prepend leftover from previous chunk if it exists
+                if (leftoverChunk) {
+                    const temp = new Uint8Array(leftoverChunk.byteLength + value.byteLength);
+                    temp.set(leftoverChunk, 0);
+                    temp.set(value, leftoverChunk.byteLength);
+                    dataToProcess = temp;
+                    leftoverChunk = null;
+                }
+
+                // Check for odd byte count
+                if (dataToProcess.byteLength % 2 !== 0) {
+                    // Save the last byte for next time
+                    const lastByteIndex = dataToProcess.byteLength - 1;
+                    leftoverChunk = dataToProcess.slice(lastByteIndex);
+                    dataToProcess = dataToProcess.slice(0, lastByteIndex);
+                }
+
+                if (dataToProcess.byteLength === 0) {
+                    // We only had 1 byte total (or none), waiting for more
                     processStream();
                     return;
                 }
+                // --- End Fix ---
 
                 const pcm16Data = new Int16Array(
-                    value.buffer,
-                    value.byteOffset,
-                    alignedByteLength / 2
+                    dataToProcess.buffer,
+                    dataToProcess.byteOffset,
+                    dataToProcess.byteLength / 2
                 );
 
                 const numSamples = pcm16Data.length;
